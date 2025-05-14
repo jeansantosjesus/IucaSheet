@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aniversários - Comissão de Advocacia Negra da Bahia</title>
+    <style>
+        :root {
+            --primary-color: #4F0000;
+            --secondary-color: #FFC300;
+            --accent-color: #006400;
+            --text-color: #333;
+            --background-color: #FFFAF0;
+            --header-bg: linear-gradient(135deg, var(--primary-color), #900);
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: var(--header-bg);
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            border-bottom: 5px solid var(--secondary-color);
+            margin-bottom: 30px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        header p {
+            margin: 10px 0 0;
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .search-box {
+            position: relative;
+            flex: 1;
+            max-width: 300px;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 2px solid var(--primary-color);
+            border-radius: 30px;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s;
+        }
+        
+        .search-box input:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 5px var(--secondary-color);
+        }
+        
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        button:hover {
+            background-color: #700;
+            transform: translateY(-2px);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        button.secondary {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+        }
+        
+        button.secondary:hover {
+            background-color: #FFD700;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .table-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        thead {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        th {
+            text-align: left;
+            padding: 12px 15px;
+            font-weight: bold;
+            position: relative;
+        }
+        
+        th:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: var(--secondary-color);
+        }
+        
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            position: relative;
+        }
+        
+        tbody tr {
+            transition: all 0.2s;
+        }
+        
+        tbody tr:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .action-btn {
+            background: none;
+            border: none;
+            padding: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.2s;
+        }
+        
+        .edit-btn {
+            color: var(--accent-color);
+        }
+        
+        .delete-btn {
+            color: #d00;
+        }
+        
+        .action-btn:hover {
+            background-color: rgba(0,0,0,0.05);
+            transform: scale(1.1);
+        }
+        
+        /* Estilos para links do Instagram */
+        td a {
+            color: #8a3ab9; /* Cor do Instagram */
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        
+        td a:hover {
+            color: #bc2a8d;
+            text-decoration: underline;
+        }
+        
+        .instagram-icon {
+            width: 16px;
+            height: 16px;
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+        
+        .modal-close:hover {
+            color: #333;
+        }
+        
+        .modal h2 {
+            margin-top: 0;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 5px rgba(255, 195, 0, 0.3);
+        }
+        
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1000;
+        }
+        
+        .toast.success {
+            background-color: var(--accent-color);
+        }
+        
+        .toast.error {
+            background-color: #d00;
+        }
+        
+        .toast.info {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+        }
+        
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #ccc;
+            margin-left: 5px;
+        }
+        
+        .status-indicator.online {
+            background-color: var(--accent-color);
+        }
+        
+        .lock-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background-color: #f44336;
+            border-radius: 50%;
+            margin-left: 5px;
+        }
+        
+        .highlight {
+            background-color: rgba(255, 195, 0, 0.2);
+            animation: highlightFade 2s forwards;
+        }
+        
+        @keyframes highlightFade {
+            from { background-color: rgba(255, 195, 0, 0.2); }
+            to { background-color: transparent; }
+        }
+        
+        .month-section {
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .month-header {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+            padding: 10px 15px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .month-table {
+            border: 1px solid #eee;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            margin-top: 30px;
+            border-top: 5px solid var(--secondary-color);
+        }
+        
+        footer p {
+            margin: 5px 0;
+        }
+        
+        .notification-badge {
+            position: relative;
+        }
+        
+        .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #f44336;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .today-highlight {
+            background-color: rgba(0, 100, 0, 0.1);
+            font-weight: bold;
+        }
+        
+        .soon-highlight {
+            background-color: rgba(255, 195, 0, 0.1);
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-box {
+                max-width: 100%;
+            }
+            
+            th, td {
+                padding: 8px 10px;
+            }
+            
+            .actions {
+                flex-direction: column;
+            }
+            
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            header p {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Aniversários</h1>
+            <p>Comissão de Advocacia Negra da Bahia</p>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="toolbar">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Buscar por nome...">
+            </div>
+            
+            <div class="user-info">
+                <div class="status">
+                    <span id="onlineUsers">0</span> pessoas online
+                    <span class="status-indicator" id="connectionStatus"></span>
+                </div>
+                
+                <div class="avatar" id="userAvatar">U</div>
+            </div>
+            
+            <button id="addBtn" class="primary">
+                <span>+ Adicionar Aniversário</span>
+            </button>
+        </div>
+        
+        <div id="monthsContainer"></div>
+    </div>
+    
+    <!-- Modal para adicionar/editar aniversário -->
+    <div class="modal" id="aniversarioModal">
+        <div class="modal-content">
+            <span class="modal-close" id="modalClose">&times;</span>
+            <h2 id="modalTitle">Adicionar Aniversário</h2>
+            
+            <form id="aniversarioForm">
+                <input type="hidden" id="editId">
+                
+                <div class="form-group">
+                    <label for="nome">Nome Completo</label>
+                    <input type="text" id="nome" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="mes">Mês</label>
+                    <select id="mes" required>
+                        <option value="">Selecione o mês</option>
+                        <option value="1">Janeiro</option>
+                        <option value="2">Fevereiro</option>
+                        <option value="3">Março</option>
+                        <option value="4">Abril</option>
+                        <option value="5">Maio</option>
+                        <option value="6">Junho</option>
+                        <option value="7">Julho</option>
+                        <option value="8">Agosto</option>
+                        <option value="9">Setembro</option>
+                        <option value="10">Outubro</option>
+                        <option value="11">Novembro</option>
+                        <option value="12">Dezembro</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="dia">Dia</label>
+                    <input type="number" id="dia" min="1" max="31" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="instagram">Instagram (opcional)</label>
+                    <input type="text" id="instagram" placeholder="@usuario">
+                </div>
+                
+                <div class="form-group">
+                    <label for="observacoes">Observações (opcional)</label>
+                    <input type="text" id="observacoes">
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="button" class="secondary" id="cancelBtn">Cancelar</button>
+                    <button type="submit" class="primary" id="saveBtn">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Modal de confirmação -->
+    <div class="modal" id="confirmModal">
+        <div class="modal-content">
+            <h2>Confirmar Exclusão</h2>
+            <p>Tem certeza que deseja excluir este aniversário?</p>
+            
+            <div class="modal-actions">
+                <button type="button" class="secondary" id="cancelDeleteBtn">Cancelar</button>
+                <button type="button" class="primary" id="confirmDeleteBtn">Excluir</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast para notificações -->
+    <div class="toast" id="toast"></div>
+    
+    <footer>
+        <div class="container">
+            <p>Comissão de Advocacia Negra da Bahia - 2025</p>
+            <p>Sistema de Registro de Aniversários</p>
+        </div>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Configuração do simulador de banco de dados local
+            const DB_KEY = 'aniversariosComissaoAdvocaciaNegra';
+            const aniversarios = JSON.parse(localStorage.getItem(DB_KEY) || '[]');
+            
+            // Simulação de usuário atual
+            const currentUser = {
+                id: generateUserId(),
+                name: 'Usuário ' + Math.floor(Math.random() * 1000)
+            };
+            
+            // Elementos DOM
+            const searchInput = document.getElementById('searchInput');
+            const addBtn = document.getElementById('addBtn');
+            const aniversarioModal = document.getElementById('aniversarioModal');
+            const modalClose = document.getElementById('modalClose');
+            const aniversarioForm = document.getElementById('aniversarioForm');
+            const cancelBtn = document.getElementById('cancelBtn');
+            const confirmModal = document.getElementById('confirmModal');
+            const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+            const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+            const toast = document.getElementById('toast');
+            const monthsContainer = document.getElementById('monthsContainer');
+            const userAvatar = document.getElementById('userAvatar');
+            const connectionStatus = document.getElementById('connectionStatus');
+            const onlineUsers = document.getElementById('onlineUsers');
+            
+            // Definir inicial no avatar
+            userAvatar.textContent = currentUser.name.charAt(0);
+            
+            // Simulação de controle de edição simultânea
+            const lockRegistry = {};
+            let itemToDelete = null;
+            
+            // Carregar dados iniciais
+            renderAniversarios();
+            
+            // Simulação de conexão online
+            simulateOnlineStatus();
+            simulateOtherUsers();
+            
+            // Event Listeners
+            addBtn.addEventListener('click', () => openModal());
+            modalClose.addEventListener('click', () => closeModal(aniversarioModal));
+            cancelBtn.addEventListener('click', () => closeModal(aniversarioModal));
+            aniversarioForm.addEventListener('submit', handleFormSubmit);
+            searchInput.addEventListener('input', handleSearch);
+            cancelDeleteBtn.addEventListener('click', () => closeModal(confirmModal));
+            confirmDeleteBtn.addEventListener('click', handleDeleteConfirm);
+            
+            function generateUserId() {
+                return Math.random().toString(36).substr(2, 9);
+            }
+            
+            function renderAniversarios() {
+                // Limpar container
+                monthsContainer.innerHTML = '';
+                
+                // Filtrar por termo de busca
+                const searchTerm = searchInput.value.toLowerCase();
+                const filteredAniversarios = aniversarios.filter(a => 
+                    a.nome.toLowerCase().includes(searchTerm)
+                );
+                
+                // Agrupar por mês
+                const aniversariosPorMes = groupByMonth(filteredAniversarios);
+                
+                // Ordenar meses
+                const meses = Object.keys(aniversariosPorMes).sort((a, b) => parseInt(a) - parseInt(b));
+                
+                // Data atual para destacar aniversários próximos
+                const hoje = new Date();
+                const mesAtual = hoje.getMonth() + 1;
+                const diaAtual = hoje.getDate();
+                
+                // Renderizar cada mês
+                meses.forEach(mes => {
+                    const aniversariosMes = aniversariosPorMes[mes].sort((a, b) => a.dia - b.dia);
+                    
+                    // Criar seção do mês
+                    const monthSection = document.createElement('div');
+                    monthSection.className = 'month-section';
+                    
+                    // Cabeçalho do mês
+                    const monthHeader = document.createElement('div');
+                    monthHeader.className = 'month-header';
+                    monthHeader.textContent = getNomeMes(parseInt(mes));
+                    monthSection.appendChild(monthHeader);
+                    
+                    // Tabela de aniversários do mês
+                    const table = document.createElement('table');
+                    table.className = 'month-table';
+                    
+                    // Cabeçalho da tabela
+                    const thead = document.createElement('thead');
+                    thead.innerHTML = `
+                        <tr>
+                            <th>Dia</th>
+                            <th>Nome</th>
+                            <th>Instagram</th>
+                            <th>Observações</th>
+                            <th>Ações</th>
+                        </tr>
+                    `;
+                    table.appendChild(thead);
+                    
+                    // Corpo da tabela
+                    const tbody = document.createElement('tbody');
+                    
+                    aniversariosMes.forEach(aniversario => {
+                        const tr = document.createElement('tr');
+                        
+                        // Adicionar destaque para aniversário de hoje ou próximos
+                        if (parseInt(mes) === mesAtual && aniversario.dia === diaAtual) {
+                            tr.classList.add('today-highlight');
+                        } else if ((parseInt(mes) === mesAtual && aniversario.dia > diaAtual && aniversario.dia <= diaAtual + 7) || 
+                                  (parseInt(mes) === mesAtual + 1 && aniversario.dia <= (diaAtual + 7) % 30)) {
+                            tr.classList.add('soon-highlight');
+                        }
+                        
+                        // Formatar Instagram para exibição
+                        const instagramDisplay = aniversario.instagram ? 
+                            `<a href="https://instagram.com/${aniversario.instagram.replace('@', '')}" target="_blank">
+                                <svg class="instagram-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                  <path fill="currentColor" d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/>
+                                </svg>
+                                ${aniversario.instagram}
+                            </a>` : 
+                            '';
+                        
+                        tr.innerHTML = `
+                            <td>${aniversario.dia}</td>
+                            <td>${aniversario.nome}${lockRegistry[aniversario.id] ? '<span class="lock-indicator" title="Em edição por outro usuário"></span>' : ''}</td>
+                            <td>${instagramDisplay}</td>
+                            <td>${aniversario.observacoes || ''}</td>
+                            <td class="actions">
+                                <button class="action-btn edit-btn" data-id="${aniversario.id}" ${lockRegistry[aniversario.id] ? 'disabled' : ''}>
+                                    Editar
+                                </button>
+                                <button class="action-btn delete-btn" data-id="${aniversario.id}">
+                                    Excluir
+                                </button>
+                            </td>
+                        `;
+                        
+                        // Adicionar event listeners aos botões
+                        tbody.appendChild(tr);
+                    });
+                    
+                    table.appendChild(tbody);
+                    monthSection.appendChild(table);
+                    monthsContainer.appendChild(monthSection);
+                });
+                
+                // Adicionar event listeners para botões de ação
+                document.querySelectorAll('.edit-btn').forEach(btn => {
+                    btn.addEventListener('click', handleEdit);
+                });
+                
+                document.querySelectorAll('.delete-btn').forEach(btn => {
+                    btn.addEventListener('click', handleDelete);
+                });
+                
+                // Exibir mensagem se não houver aniversários
+                if (meses.length === 0) {
+                    const emptyMessage = document.createElement('div');
+                    emptyMessage.style.textAlign = 'center';
+                    emptyMessage.style.padding = '30px';
+                    emptyMessage.style.color = '#666';
+                    emptyMessage.innerHTML = `
+                        <p>Nenhum aniversário encontrado.</p>
+                        <p>Clique em "Adicionar Aniversário" para começar.</p>
+                    `;
+                    monthsContainer.appendChild(emptyMessage);
+                }
+            }
+            
+            function groupByMonth(aniversariosList) {
+                const result = {};
+                
+                aniversariosList.forEach(aniv => {
+                    if (!result[aniv.mes]) {
+                        result[aniv.mes] = [];
+                    }
+                    result[aniv.mes].push(aniv);
+                });
+                
+                return result;
+            }
+            
+            function getNomeMes(numMes) {
+                const meses = [
+                    'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+                    'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+                ];
+                return meses[numMes - 1];
+            }
+            
+            function openModal(aniversario = null) {
+                const modalTitle = document.getElementById('modalTitle');
+                const editId = document.getElementById('editId');
+                const nome = document.getElementById('nome');
+                const mes = document.getElementById('mes');
+                const dia = document.getElementById('dia');
+                const observacoes = document.getElementById('observacoes');
+                
+                // Limpar formulário
+                aniversarioForm.reset();
+                
+                if (aniversario) {
+                    // Modo edição
+                    modalTitle.textContent = 'Editar Aniversário';
+                    editId.value = aniversario.id;
+                    nome.value = aniversario.nome;
+                    mes.value = aniversario.mes;
+                    dia.value = aniversario.dia;
+                    document.getElementById('instagram').value = aniversario.instagram || '';
+                    observacoes.value = aniversario.observacoes || '';
+                    
+                    // Simular trava para edição
+                    lockRegistry[aniversario.id] = currentUser.id;
+                    renderAniversarios();
+                } else {
+                    // Modo criação
+                    modalTitle.textContent = 'Adicionar Aniversário';
+                    editId.value = '';
+                }
+                
+                aniversarioModal.style.display = 'flex';
+            }
+            
+            function closeModal(modal) {
+                // Remover trava se estiver em modo edição
+                const editId = document.getElementById('editId').value;
+                if (editId && lockRegistry[editId]) {
+                    delete lockRegistry[editId];
+                    renderAniversarios();
+                }
+                
+                modal.style.display = 'none';
+            }
+            
+            function handleFormSubmit(e) {
+                e.preventDefault();
+                
+                const editId = document.getElementById('editId').value;
+                const nome = document.getElementById('nome').value.trim();
+                const mes = document.getElementById('mes').value;
+                const dia = parseInt(document.getElementById('dia').value);
+                const instagram = document.getElementById('instagram').value.trim();
+                const observacoes = document.getElementById('observacoes').value.trim();
+                
+                // Validação do dia baseado no mês
+                if (!validarDiaMes(dia, parseInt(mes))) {
+                    showToast('Dia inválido para o mês selecionado', 'error');
+                    return;
+                }
+                
+                if (editId) {
+                    // Editar aniversário existente
+                    const index = aniversarios.findIndex(a => a.id === editId);
+                    if (index !== -1) {
+                        aniversarios[index] = {
+                            ...aniversarios[index],
+                            nome,
+                            mes,
+                            dia,
+                            instagram,
+                            observacoes,
+                            updatedAt: new Date().toISOString()
+                        };
+                        
+                        delete lockRegistry[editId];
+                        showToast('Aniversário atualizado com sucesso!', 'success');
+                    }
+                } else {
+                    // Adicionar novo aniversário
+                    aniversarios.push({
+                        id: generateUserId(),
+                        nome,
+                        mes,
+                        dia,
+                        instagram,
+                        observacoes,
+                        createdAt: new Date().toISOString(),
+                        updatedAt: new Date().toISOString()
+                    });
+                    
+                    showToast('Aniversário adicionado com sucesso!', 'success');
+                }
+                
+                // Salvar no armazenamento local
+                localStorage.setItem(DB_KEY, JSON.stringify(aniversarios));
+                
+                // Atualizar a visão
+                renderAniversarios();
+                
+                // Fechar o modal
+                closeModal(aniversarioModal);
+            }
+            
+            function validarDiaMes(dia, mes) {
+                if (dia < 1) return false;
+                
+                // Verificar dias de acordo com o mês
+                if ([4, 6, 9, 11].includes(mes) && dia > 30) return false;
+                if (mes === 2 && dia > 29) return false; // Simplificado para incluir anos bissextos
+                if (dia > 31) return false;
+                
+                return true;
+            }
+            
+            function handleEdit(e) {
+                const id = e.target.dataset.id;
+                const aniversario = aniversarios.find(a => a.id === id);
+                
+                if (aniversario) {
+                    openModal(aniversario);
+                }
+            }
+            
+            function handleDelete(e) {
+                const id = e.target.dataset.id;
+                itemToDelete = id;
+                
+                confirmModal.style.display = 'flex';
+            }
+            
+            function handleDeleteConfirm() {
+                if (!itemToDelete) return;
+                
+                const index = aniversarios.findIndex(a => a.id === itemToDelete);
+                
+                if (index !== -1) {
+                    aniversarios.splice(index, 1);
+                    
+                    // Atualizar localStorage
+                    localStorage.setItem(DB_KEY, JSON.stringify(aniversarios));
+                    
+                    // Atualizar visualização
+                    renderAniversarios();
+                    
+                    showToast('Aniversário excluído com sucesso', 'success');
+                }
+                
+                closeModal(confirmModal);
+                itemToDelete = null;
+            }
+            
+            function handleSearch() {
+                renderAniversarios();
+            }
+            
+            function showToast(message, type = 'info') {
+                toast.textContent = message;
+                toast.className = `toast ${type}`;
+                toast.style.opacity = 1;
+                
+                setTimeout(() => {
+                    toast.style.opacity = 0;
+                }, 3000);
+            }
+            
+            function simulateOnlineStatus() {
+                // Simular estado de conexão
+                const online = Math.random() > 0.1; // 90% de chance de estar online
+                
+                if (online) {
+                    connectionStatus.classList.add('online');
+                } else {
+                    connectionStatus.classList.remove('online');
+                    showToast('Conexão instável. Alterações podem não ser salvas automaticamente.', 'error');
+                }
+                
+                // Simular alterações de conexão a cada 30-60 segundos
+                setTimeout(simulateOnlineStatus, Math.random() * 30000 + 30000);
+            }
+            
+            function simulateOtherUsers() {
+                // Simular número de usuários online entre 1-5
+                const numUsers = Math.floor(Math.random() * 5) + 1;
+                onlineUsers.textContent = numUsers;
+                
+                // Simular bloqueios aleatórios para edição
+                if (aniversarios.length > 0 && Math.random() > 0.7) { // 30% de chance
+                    const randomIndex = Math.floor(Math.random() * aniversarios.length);
+                    const randomId = aniversarios[randomIndex].id;
+                    
+                    // Se não estiver bloqueado pelo usuário atual, simular bloqueio
+                    if (!lockRegistry[randomId] || lockRegistry[randomId] !== currentUser.id) {
+                        lockRegistry[randomId] = 'outro-usuario-' + Math.floor(Math.random() * 100);
+                        
+                        // Depois de um tempo, liberar o bloqueio
+                        setTimeout(() => {
+                            delete lockRegistry[randomId];
+                            renderAniversarios();
+                        }, Math.random() * 15000 + 5000); // 5-20 segundos
+                        
+                        renderAniversarios();
+                    }
+                }
+                
+                // Simular adição/remoção de usuários a cada 10-20 segundos
+                setTimeout(simulateOtherUsers, Math.random() * 10000 + 10000);
+            }
+            
+            // Iniciar a simulação
+            simulateOnlineStatus();
+            simulateOtherUsers();
+        });
+    </script>
+</body>
+</html>
